@@ -8,18 +8,31 @@
 module Homework2 where
 
 import           Plutus.V2.Ledger.Api (BuiltinData, POSIXTime, PubKeyHash,
-                                       ScriptContext, Validator,
-                                       mkValidatorScript)
+                                       ScriptContext (scriptContextTxInfo), Validator,
+                                       mkValidatorScript, TxInfo (txInfoValidRange))
 import           PlutusTx             (applyCode, compile, liftCode)
-import           PlutusTx.Prelude     (Bool (False), (.))
 import           Utilities            (wrap)
+import           PlutusTx.Prelude          (Bool, traceIfFalse, ($), (&&), (.))
+import Plutus.V2.Ledger.Contexts (txSignedBy)
+import Plutus.V1.Ledger.Interval
 
 ---------------------------------------------------------------------------------------------------
 ----------------------------------- ON-CHAIN / VALIDATOR ------------------------------------------
 
 {-# INLINABLE mkParameterizedVestingValidator #-}
 mkParameterizedVestingValidator :: PubKeyHash -> POSIXTime -> () -> ScriptContext -> Bool
-mkParameterizedVestingValidator _beneficiary _deadline () _ctx = False -- FIX ME!
+mkParameterizedVestingValidator pkh deadline () ctx =
+    traceIfFalse "beneficiary's signature missing" signedByBeneficiary &&
+    traceIfFalse "deadline not reached" deadlineReached
+  where
+    info :: TxInfo
+    info = scriptContextTxInfo ctx
+
+    signedByBeneficiary :: Bool
+    signedByBeneficiary = txSignedBy info pkh
+
+    deadlineReached :: Bool
+    deadlineReached = contains (from deadline) $ txInfoValidRange info
 
 {-# INLINABLE  mkWrappedParameterizedVestingValidator #-}
 mkWrappedParameterizedVestingValidator :: PubKeyHash -> BuiltinData -> BuiltinData -> BuiltinData -> ()
