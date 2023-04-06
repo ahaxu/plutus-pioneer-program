@@ -11,13 +11,13 @@ import {
     AddressDetails,
 } from "https://deno.land/x/lucid@0.9.1/mod.ts"
 // create a seed.ts file with your seed
-import { secretSeed } from "./seed.ts"
+import { secretSeed, blockfrostKey  } from "./seed.ts"
 
 // set blockfrost endpoint
 const lucid = await Lucid.new(
   new Blockfrost(
     "https://cardano-preprod.blockfrost.io/api/v0",
-    "insert you own api key here"
+    blockfrostKey
   ),
   "Preprod"
 );
@@ -42,8 +42,8 @@ const VestingDatum = Data.Object({
 type VestingDatum = Data.Static<typeof VestingDatum>;
 
 // Set the vesting deadline
-const deadlineDate: Date = new Date("2023-03-19T00:00:00Z")
-const deadlinePosIx = BigInt(deadlineDate.getTime());
+const deadlineDate: Date = new Date('2023-04-01')
+const deadlinePosIx = BigInt(deadlineDate.getTime()-100000);
 
 // Set the vesting beneficiary to our own key.
 const details: AddressDetails = getAddressDetails(addr);
@@ -58,20 +58,34 @@ const datum: VestingDatum = {
 // An asynchronous function that sends an amount of Lovelace to the script with the above datum.
 async function vestFunds(amount: bigint): Promise<TxHash> {
     const dtm: Datum = Data.to<VestingDatum>(datum,VestingDatum);
+    console.log("datum", datum)
+
     const tx = await lucid
       .newTx()
       .payToContract(vestingAddress, { inline: dtm }, { lovelace: amount })
       .complete();
     const signedTx = await tx.sign().complete();
-    const txHash = await signedTx.submit();
+    console.log("signedTx", signedTx)
+
+    const txHash = await signedTx.submit().catch(error => console.log(error));
+
+    console.log("txHash", txHash)
+
     return txHash
 }
 
 async function claimVestedFunds(): Promise<TxHash> {
     const dtm: Datum = Data.to<VestingDatum>(datum,VestingDatum);
+
+    console.log("vestingAddress", vestingAddress)
+
     const utxoAtScript: UTxO[] = await lucid.utxosAt(vestingAddress);
     const ourUTxO: UTxO[] = utxoAtScript.filter((utxo) => utxo.datum == dtm);
-    
+
+    console.log("datum", dtm)
+
+    console.log("ourUTxO", ourUTxO)
+
     if (ourUTxO && ourUTxO.length > 0) {
         const tx = await lucid
             .newTx()
@@ -89,4 +103,8 @@ async function claimVestedFunds(): Promise<TxHash> {
 }
 
 //console.log(await vestFunds(100000000n));
-//console.log(await claimVestedFunds());
+//console.log("vest done");
+
+console.log(await claimVestedFunds());
+console.log("claimed done");
+

@@ -27,8 +27,8 @@ async function loadCardano() {
         const api = await nami.enable();
         console.log('nami enabled');
         const lucid = await L.Lucid.new(
-            new L.Blockfrost("https://cardano-preview.blockfrost.io/api/v0", "preview1JXEDVldkIyBkxEUrEx3n9ll4afFK1Xj"),
-            "Preview",
+            new L.Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "preprodDR1cB56K4K288lgo47OIKJg9WbXLewBQ"),
+            "Preprod",
         );
         console.log('lucid active');
         lucid.selectWallet(api);

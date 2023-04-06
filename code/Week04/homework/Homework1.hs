@@ -49,8 +49,8 @@ unstableMakeIsData ''MisteryDatum
 {-# INLINABLE mkMisteryValidator #-}
 mkMisteryValidator :: MisteryDatum -> () -> ScriptContext -> Bool
 mkMisteryValidator dat () ctx =
-    traceIfFalse "Benificiary1 did not sign or to late" checkCondition1 ||
-    traceIfFalse "Benificiary2 did not sign or is to early" checkCondition2
+    traceIfFalse "Benificiary1 did not sign or too late" checkCondition1 ||
+    traceIfFalse "Benificiary2 did not sign or is too early" checkCondition2
     where
         txInfo :: TxInfo
         txInfo = scriptContextTxInfo ctx
