@@ -34,7 +34,7 @@ console.log("own pubkey hash: " + pkh);
 //const utxo = utxos[0];
 //console.log("utxo: " + utxo.txHash + "#" + utxo.outputIndex);
 
-const tn = fromText("HaTinh38");
+const tn = fromText("KyXuanKyAnhHaTinh38");
 // Set the vesting deadline
 // deadline has passed
 //const deadlineDate: Date = new Date('2023-04-10')
@@ -67,7 +67,7 @@ const unit: Unit = policyId + tn;
 
 const tx = await lucid
     .newTx()
-    .mintAssets({[unit]: 5n}, Data.void())
+    .mintAssets({[unit]: 1n}, Data.void())
     .attachMintingPolicy(deadlinePolicy)
     .addSignerKey(pkh)
     .validFrom(Date.now()-100000)

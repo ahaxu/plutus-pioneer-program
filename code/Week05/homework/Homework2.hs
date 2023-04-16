@@ -20,7 +20,7 @@ import           Utilities            (wrapPolicy, writeCodeToFile, writePolicyT
 import           Prelude                    (IO, Show (show), String)
 import           Plutus.V1.Ledger.Value     (flattenValue)
 import           Text.Printf                (printf)
-import           PlutusTx.Builtins.Internal (BuiltinByteString (BuiltinByteString), emptyByteString)
+import           PlutusTx.Builtins.Internal (emptyByteString)
 
 {-# INLINABLE mkEmptyNFTPolicy #-}
 -- Minting policy for an NFT, where the minting transaction must consume the given UTxO as input

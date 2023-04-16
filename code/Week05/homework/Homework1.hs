@@ -24,7 +24,7 @@ import           Text.Printf                (printf)
 mkDeadlinePolicy :: PubKeyHash -> POSIXTime -> () -> ScriptContext -> Bool
 mkDeadlinePolicy pkh deadline () ctx =
     traceIfFalse "beneficiary's signature missing" signedByBeneficiary &&
-    traceIfFalse "AAA deadline has passed" checkDeadline
+    traceIfFalse "deadline has passed" checkDeadline
   where
     info :: TxInfo
     info = scriptContextTxInfo ctx

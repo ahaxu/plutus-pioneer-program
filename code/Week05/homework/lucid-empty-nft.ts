@@ -29,7 +29,6 @@ const utxos = await lucid.utxosAt(addr);
 const utxo = utxos[0];
 console.log("utxo: " + utxo.txHash + "#" + utxo.outputIndex);
 
-const tn = fromText("HaTinh38");
 const Params = Data.Tuple([Data.String, Data.BigInt, Data.String]);
 type Params = Data.Static<typeof Params>;
 const nftPolicy: MintingPolicy = {

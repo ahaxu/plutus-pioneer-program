@@ -47,7 +47,7 @@ const signedPolicy: MintingPolicy = {
 const policyId: PolicyId = lucid.utils.mintingPolicyToId(signedPolicy);
 console.log("minting policy: " + policyId);
 
-const unit: Unit = policyId + fromText("PPP Signed");
+const unit: Unit = policyId + fromText("KyXuanHaTinh");
 
 const amount: bigint = readAmount();
 
