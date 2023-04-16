@@ -37,7 +37,9 @@ console.log("own address: " + addr);
 const policyId: PolicyId = lucid.utils.mintingPolicyToId(freePolicy);
 console.log("minting policy: " + policyId);
 
-const unit: Unit = policyId + fromText("PPP Free");
+const unit: Unit = policyId + fromText("longkaht");
+
+console.log("readAmount");
 
 const amount: bigint = readAmount();
 

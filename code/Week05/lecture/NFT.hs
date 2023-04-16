@@ -44,8 +44,8 @@ mkNFTPolicy oref tn () ctx = traceIfFalse "UTxO not consumed"   hasUTxO         
 
 {-# INLINABLE mkWrappedNFTPolicy #-}
 mkWrappedNFTPolicy :: BuiltinData -> BuiltinData -> BuiltinData -> BuiltinData -> BuiltinData -> ()
-mkWrappedNFTPolicy tid ix tn' = wrapPolicy $ mkNFTPolicy oref tn
-  where
+mkWrappedNFTPolicy tid ix tn' =
+  let
     oref :: TxOutRef
     oref = TxOutRef
         (TxId $ PlutusTx.unsafeFromBuiltinData tid)
@@ -53,6 +53,9 @@ mkWrappedNFTPolicy tid ix tn' = wrapPolicy $ mkNFTPolicy oref tn
 
     tn :: TokenName
     tn = PlutusTx.unsafeFromBuiltinData tn'
+
+    p = mkNFTPolicy oref tn
+  in wrapPolicy $ p
 
 nftCode :: PlutusTx.CompiledCode (BuiltinData -> BuiltinData -> BuiltinData -> BuiltinData -> BuiltinData -> ())
 nftCode = $$(PlutusTx.compile [|| mkWrappedNFTPolicy ||])
